@@ -1,250 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Login — NEXUS Gaming</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login — NEXUS ARENA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#00D4FF;--secondary:#8B5CF6;--accent:#FF0080;--green:#00FF88;--bg:#020714;--surface:#0A1628;--surface-2:#0F1F3D;--text:#E2EAF4;--muted:#6B8098;--border:rgba(0,212,255,.12);--glass:rgba(10,22,40,.7);--glass-border:rgba(0,212,255,.15);--glow-cyan:0 0 20px rgba(0,212,255,.5),0 0 60px rgba(0,212,255,.2);--grad-cyan:linear-gradient(135deg,#00D4FF,#0099CC);--grad-purple:linear-gradient(135deg,#8B5CF6,#6D28D9);--grad-hero:linear-gradient(135deg,#00D4FF 0%,#8B5CF6 50%,#FF0080 100%);--radius:18px}
-html,body{height:100%;overflow-x:hidden}
-body{font-family:'Rajdhani','Inter',sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
-a{color:inherit;text-decoration:none}
-button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-h1,h2,h3{font-family:'Orbitron',sans-serif;line-height:1.1}
+:root{--bg:#0a0a0f;--surface:#0d0d1a;--card:#12121f;--border:#ffffff14;--text:#e8e8f0;--muted:#8888aa;--purple:#7c3aed;--green:#00ff88;--red:#ff4444;--gold:#ffd700;--blue:#3b82f6}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;animation:fadeIn 0.4s ease;min-height:100vh;display:flex;flex-direction:column}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--purple)}::-webkit-scrollbar-track{background:transparent}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
-/* BG */
-.bg-orbs{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(100px)}
-.orb1{width:600px;height:600px;background:rgba(0,212,255,.08);top:-200px;left:-200px;animation:of 10s ease-in-out infinite}
-.orb2{width:500px;height:500px;background:rgba(139,92,246,.1);bottom:-150px;right:-100px;animation:of 8s ease-in-out infinite reverse}
-@keyframes of{0%,100%{transform:translate(0,0)}50%{transform:translate(20px,-20px)}}
-canvas{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.3}
+/* TOP BAR */
+.top-bar{padding:1.25rem 2rem;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:'Orbitron',sans-serif;font-size:1.2rem;color:var(--purple);text-shadow:0 0 20px var(--purple);animation:logoPulse 3s infinite}
+@keyframes logoPulse{0%,100%{text-shadow:0 0 20px var(--purple)}50%{text-shadow:0 0 35px var(--purple),0 0 60px var(--purple)}}
+.back-link{color:var(--muted);text-decoration:none;font-size:0.85rem}
+.back-link:hover{color:var(--purple)}
 
-/* GRID LAYOUT */
-.auth-page{min-height:100vh;display:grid;grid-template-columns:1fr;position:relative;z-index:1}
-@media(min-width:900px){.auth-page{grid-template-columns:1fr 1fr}}
+/* MAIN */
+.login-wrap{flex:1;display:flex;overflow:hidden;position:relative}
+#loginCanvas{position:absolute;inset:0;z-index:0}
 
 /* LEFT PANEL */
-.auth-left{display:none;position:relative;overflow:hidden;align-items:center;justify-content:center;flex-direction:column;padding:60px;background:radial-gradient(ellipse at center,rgba(0,212,255,.06) 0%,transparent 70%)}
-@media(min-width:900px){.auth-left{display:flex}}
-.auth-left::before{content:'';position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1542751371-adc38448a05e?w=800&q=80') center/cover;opacity:.12}
-.auth-left::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(2,7,20,.8),rgba(10,22,40,.6))}
-.auth-left-content{position:relative;z-index:2;text-align:center}
-.al-logo{font-family:'Orbitron',sans-serif;font-size:3rem;font-weight:900;background:var(--grad-hero);-webkit-background-clip:text;background-clip:text;color:transparent;margin-bottom:8px}
-.al-tagline{color:var(--muted);font-size:1.05rem;margin-bottom:40px;font-family:'Inter',sans-serif}
-.al-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:420px}
-.al-stat{background:rgba(10,22,40,.6);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center}
-.al-stat strong{display:block;font-family:'Orbitron',sans-serif;font-size:1.4rem;font-weight:900;background:var(--grad-cyan);-webkit-background-clip:text;background-clip:text;color:transparent}
-.al-stat span{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-.al-games{display:flex;gap:12px;margin-top:40px;justify-content:center}
-.al-game{width:60px;height:60px;border-radius:16px;background:rgba(10,22,40,.7);border:1px solid var(--border);display:grid;place-items:center;font-size:1.6rem;transition:all .3s;animation:float 4s ease-in-out infinite}
-.al-game:nth-child(2){animation-delay:-.8s}.al-game:nth-child(3){animation-delay:-1.6s}.al-game:nth-child(4){animation-delay:-2.4s}.al-game:nth-child(5){animation-delay:-3.2s}
-.al-game:hover{transform:translateY(-6px);border-color:var(--primary);box-shadow:var(--glow-cyan)}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.left-panel{width:45%;background:var(--surface);border-right:1px solid var(--border);padding:3rem 2.5rem;display:flex;flex-direction:column;gap:1.5rem;position:relative;z-index:1;overflow-y:auto}
+@media(max-width:768px){.left-panel{width:100%;border-right:none;border-bottom:1px solid var(--border)}}
+.role-heading{font-family:'Orbitron',sans-serif;font-size:1.1rem;margin-bottom:0.5rem}
+.role-btn{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);border-radius:10px;padding:14px 20px;text-align:left;display:flex;align-items:center;gap:14px;font-size:0.9rem;font-family:'Inter',sans-serif;cursor:pointer;transition:all 0.2s;position:relative}
+.role-btn:hover{border-color:rgba(255,255,255,0.2)}
+.role-btn.active-player{border-color:var(--green);background:rgba(0,255,136,0.08);border-left:4px solid var(--green)}
+.role-btn.active-streamer{border-color:#bf5fff;background:rgba(191,95,255,0.08);border-left:4px solid #bf5fff}
+.role-btn.active-admin{border-color:var(--red);background:rgba(255,68,68,0.08);border-left:4px solid var(--red)}
+.role-btn.active-organizer{border-color:var(--gold);background:rgba(255,215,0,0.08);border-left:4px solid var(--gold)}
+.role-icon{font-size:1.4rem;width:36px;text-align:center}
+.role-text{display:flex;flex-direction:column}
+.role-name{font-weight:600;font-size:0.9rem}
+.role-sub{font-size:0.75rem;color:var(--muted)}
 
-/* RIGHT PANEL - FORM */
-.auth-right{display:flex;align-items:center;justify-content:center;padding:40px 24px;min-height:100vh}
-.auth-box{width:100%;max-width:440px;animation:slideUp .7s ease both}
-@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
-.auth-nav{display:flex;align-items:center;justify-content:space-between;margin-bottom:40px}
-.auth-logo{display:flex;align-items:center;gap:10px;font-family:'Orbitron',sans-serif;font-weight:900;font-size:1.3rem}
-.auth-logo-icon{width:38px;height:38px;border-radius:10px;background:var(--grad-cyan);display:grid;place-items:center;color:#000;font-size:1rem}
-.auth-logo span{background:var(--grad-hero);-webkit-background-clip:text;background-clip:text;color:transparent}
-.logo-img{width:190px;height:80px;border-radius:8px}
-.back-btn{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:.88rem;transition:color .25s}
-.back-btn:hover{color:var(--primary)}
+/* ROLE PREVIEW CARD */
+.role-preview{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.5rem;text-align:center;transition:border-color 0.3s;margin-top:0.5rem}
+.preview-icon{font-size:3rem;margin-bottom:0.75rem;animation:float 3s ease-in-out infinite;display:block}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.preview-role-name{font-family:'Orbitron',sans-serif;font-size:1.3rem;margin-bottom:0.5rem;transition:color 0.3s}
+.preview-tagline{font-size:0.83rem;color:var(--muted);margin-bottom:1rem}
+.preview-features{list-style:none;display:flex;flex-direction:column;gap:0.5rem;text-align:left}
+.preview-features li{font-size:0.83rem;display:flex;align-items:center;gap:8px}
+.preview-features li::before{content:'✓';color:var(--green);font-weight:bold;flex-shrink:0}
 
-.auth-title{font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:900;margin-bottom:8px}
-.auth-sub{color:var(--muted);font-size:.92rem;margin-bottom:32px;font-family:'Inter',sans-serif}
-.auth-sub a{color:var(--primary);font-weight:600}
-
-/* SOCIAL BTNS */
-.social-btns{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
-.social-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;border-radius:12px;
-  background:var(--surface);border:1px solid var(--border);font-weight:600;font-size:.9rem;
-  transition:all .25s;cursor:pointer}
-.social-btn:hover{border-color:var(--primary);background:var(--surface-2);transform:translateY(-2px)}
-.social-btn i{font-size:1.1rem}
-.social-btn.google i{color:#EA4335}
-.social-btn.discord i{color:#5865F2}
-.divider{display:flex;align-items:center;gap:12px;margin-bottom:24px}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.divider span{color:var(--muted);font-size:.82rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em}
-
-/* FORM */
-.field{margin-bottom:18px}
-.label{display:block;font-size:.82rem;font-weight:700;margin-bottom:7px;color:var(--text);text-transform:uppercase;letter-spacing:.08em}
-.input-wrap{position:relative}
-.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:.95rem;pointer-events:none;transition:color .25s}
-.input{width:100%;padding:14px 14px 14px 44px;border-radius:12px;border:1.5px solid var(--border);
-  background:var(--surface);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:.98rem;
-  transition:all .25s;outline:none}
-.input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(0,212,255,.1)}
-.input:focus+.input-icon,.input-wrap:focus-within .input-icon{color:var(--primary)}
-.input-eye{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);cursor:pointer;transition:color .25s;font-size:.95rem}
-.input-eye:hover{color:var(--primary)}
-.input.has-eye{padding-right:44px}
-.input-err{display:none;color:var(--accent);font-size:.78rem;margin-top:5px;font-weight:600}
-.field.error .input{border-color:var(--accent);box-shadow:0 0 0 4px rgba(255,0,128,.1)}
-.field.error .input-err{display:block}
-.field.valid .input{border-color:var(--green)}
-.forgot{display:flex;justify-content:flex-end;margin-top:-8px;margin-bottom:18px}
-.forgot a{color:var(--primary);font-size:.82rem;font-weight:600;transition:opacity .2s}
-.forgot a:hover{opacity:.7}
-
-/* CHECKBOX */
-.check-row{display:flex;align-items:center;gap:10px;margin-bottom:24px;cursor:pointer}
-.check-row input{width:18px;height:18px;accent-color:var(--primary);cursor:pointer}
-.check-row span{font-size:.88rem;color:var(--muted)}
-.check-row a{color:var(--primary)}
-
-/* SUBMIT BTN */
-.btn-submit{width:100%;padding:15px;border-radius:12px;background:var(--grad-cyan);color:#000;
-  font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
-  border:none;cursor:pointer;transition:all .3s;box-shadow:var(--glow-cyan);position:relative;overflow:hidden}
-.btn-submit:hover{transform:translateY(-3px);box-shadow:0 0 50px rgba(0,212,255,.6)}
-.btn-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
-.btn-submit .spinner{display:none;width:20px;height:20px;border-radius:50%;border:3px solid rgba(0,0,0,.3);border-top-color:#000;animation:spin .7s linear infinite}
+/* RIGHT PANEL */
+.right-panel{flex:1;padding:3rem 2.5rem;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;z-index:1;overflow-y:auto}
+@media(max-width:768px){.right-panel{width:100%}}
+.form-logo{font-family:'Orbitron',sans-serif;font-size:1.4rem;color:var(--purple);text-shadow:0 0 15px var(--purple);margin-bottom:0.5rem}
+.form-title{font-family:'Orbitron',sans-serif;font-size:1.6rem;margin-bottom:0.5rem;text-align:center}
+.form-sub{color:var(--muted);font-size:0.85rem;margin-bottom:2rem;text-align:center}
+.login-form{width:100%;max-width:400px;display:flex;flex-direction:column;gap:1rem}
+.input-group{position:relative}
+.input-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:1rem;z-index:1}
+.form-input{width:100%;background:var(--card);border:1px solid var(--border);color:var(--text);padding:12px 14px 12px 42px;border-radius:10px;font-size:0.9rem;font-family:'Inter',sans-serif;transition:border-color 0.2s}
+.form-input:focus{outline:none;border-color:var(--purple)}
+.pw-toggle{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:0.85rem;padding:0}
+.pw-toggle:hover{color:var(--text)}
+.form-row{display:flex;justify-content:space-between;align-items:center}
+.remember-label{display:flex;align-items:center;gap:7px;font-size:0.82rem;color:var(--muted);cursor:pointer}
+.remember-label input{accent-color:var(--purple)}
+.forgot-link{color:var(--purple);text-decoration:none;font-size:0.82rem}
+.forgot-link:hover{text-decoration:underline}
+.login-btn{width:100%;border:none;padding:13px;border-radius:10px;font-family:'Orbitron',sans-serif;font-size:0.9rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:10px}
+.login-btn:hover{transform:scale(1.02)}
+.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.6s linear infinite;display:none}
 @keyframes spin{to{transform:rotate(360deg)}}
-.btn-submit.loading .btn-text{display:none}
-.btn-submit.loading .spinner{display:block}
+.divider{display:flex;align-items:center;gap:0.75rem;color:var(--muted);font-size:0.8rem}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.social-btns{display:flex;gap:0.75rem;width:100%}
+.social-btn{flex:1;background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 8px;border-radius:8px;font-size:0.82rem;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:6px}
+.social-btn.google{border-color:#4285f4}
+.social-btn.google:hover{background:rgba(66,133,244,0.1)}
+.social-btn.discord{border-color:#5865f2}
+.social-btn.discord:hover{background:rgba(88,101,242,0.1)}
+.social-btn.steam{border-color:#1b2838}
+.social-btn.steam:hover{background:rgba(27,40,56,0.3)}
+.signup-link{text-align:center;font-size:0.85rem;color:var(--muted)}
+.signup-link a{color:var(--purple);text-decoration:none}
+.signup-link a:hover{text-decoration:underline}
+.error-msg{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--red);display:none}
+.error-msg.show{display:block}
 
-.auth-footer-note{text-align:center;margin-top:20px;font-size:.82rem;color:var(--muted)}
-.auth-footer-note a{color:var(--primary);font-weight:600}
-
-/* Toast */
-.toast-wrap{position:fixed;top:24px;right:24px;z-index:600;display:flex;flex-direction:column;gap:10px}
-.toast{background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--primary);
-  padding:14px 18px;border-radius:12px;min-width:260px;animation:tIn .35s ease;display:flex;gap:10px;align-items:center;font-size:.92rem;font-weight:600;box-shadow:0 8px 30px rgba(0,0,0,.5)}
-.toast.error{border-left-color:var(--accent)}.toast.success{border-left-color:var(--green)}
-@keyframes tIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+/* MOBILE STACK */
+@media(max-width:768px){.login-wrap{flex-direction:column}}
 </style>
 </head>
 <body>
-<div class="bg-orbs"><div class="orb orb1"></div><div class="orb orb2"></div></div>
-<canvas id="cvs"></canvas>
-<div class="toast-wrap" id="toastWrap"></div>
 
-<div class="auth-page">
-  <!-- LEFT PANEL -->
-  <div class="auth-left">
-    <div class="auth-left-content">
-      <a  href="index.html">
-          <img src="./assets/stackly-colormix-logo.png" alt="gaming-logo" class="logo-img">
-      </a>
-      <div class="al-tagline">The Ultimate Gaming Platform</div>
-      <div class="al-stats">
-        <div class="al-stat"><strong>50M+</strong><span>Players</span></div>
-        <div class="al-stat"><strong>2400+</strong><span>Games</span></div>
-        <div class="al-stat"><strong>$200M</strong><span>Prizes</span></div>
-      </div>
-      <div class="al-games">
-        <div class="al-game">🎯</div>
-        <div class="al-game">🏙️</div>
-        <div class="al-game">🪂</div>
-        <div class="al-game">⚽</div>
-        <div class="al-game">🦊</div>
-      </div>
+<div class="top-bar">
+  <a href="index.html" class="logo">
+    <svg width="24" height="24" viewBox="0 0 28 28" fill="none"><rect x="2" y="10" width="24" height="14" rx="4" stroke="#7c3aed" stroke-width="2"/><path d="M8 17h2m4 0h2m-4-2v4" stroke="#7c3aed" stroke-width="2" stroke-linecap="round"/><circle cx="20" cy="17" r="1.5" fill="#7c3aed"/><path d="M9 10V7a5 5 0 0110 0v3" stroke="#7c3aed" stroke-width="2"/></svg>
+    NEXUS ARENA
+  </a>
+  <a href="index.html" class="back-link">← Back to Home</a>
+</div>
+
+<div class="login-wrap">
+  <canvas id="loginCanvas"></canvas>
+
+  <!-- LEFT: ROLE SELECTION -->
+  <div class="left-panel">
+    <div>
+      <div class="role-heading">SELECT YOUR ROLE</div>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem">Choose your identity on Nexus Arena</p>
+    </div>
+
+    <button class="role-btn active-player" id="rolePlayer" onclick="selectRole('player')">
+      <span class="role-icon">🎮</span>
+      <span class="role-text"><span class="role-name">PLAYER</span><span class="role-sub">Compete in tournaments & ranked matches</span></span>
+    </button>
+    <button class="role-btn" id="roleStreamer" onclick="selectRole('streamer')">
+      <span class="role-icon">📡</span>
+      <span class="role-text"><span class="role-name">STREAMER</span><span class="role-sub">Broadcast games & grow your audience</span></span>
+    </button>
+    <button class="role-btn" id="roleAdmin" onclick="selectRole('admin')">
+      <span class="role-icon">🛡️</span>
+      <span class="role-text"><span class="role-name">ADMIN</span><span class="role-sub">Manage platform, users & reports</span></span>
+    </button>
+    <button class="role-btn" id="roleOrganizer" onclick="selectRole('organizer')">
+      <span class="role-icon">🏆</span>
+      <span class="role-text"><span class="role-name">ORGANIZER</span><span class="role-sub">Create & manage tournaments</span></span>
+    </button>
+
+    <!-- ROLE PREVIEW -->
+    <div class="role-preview" id="rolePreview">
+      <span class="preview-icon" id="previewIcon">🎮</span>
+      <div class="preview-role-name" id="previewName" style="color:var(--green)">PLAYER</div>
+      <div class="preview-tagline" id="previewTagline">Compete. Rank up. Win prizes.</div>
+      <ul class="preview-features" id="previewFeatures">
+        <li>Join unlimited tournaments</li>
+        <li>Global leaderboard ranking</li>
+        <li>Track KD, wins & earnings</li>
+      </ul>
     </div>
   </div>
 
-  <!-- RIGHT PANEL -->
-  <div class="auth-right">
-    <div class="auth-box">
-      <div class="auth-nav">
-        <div class="auth-logo">
-          
-          <a  href="index.html">
-              <img src="./assets/stackly-colormix-logo.png" alt="gaming-logo" class="logo-img">
-          </a>
-        </div>
-        <a href="index.html" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Home</a>
+  <!-- RIGHT: FORM -->
+  <div class="right-panel">
+    <div class="form-logo">NEXUS ARENA</div>
+    <div class="form-title">Welcome Back</div>
+    <div class="form-sub">Sign in to your account to continue</div>
+
+    <div class="login-form">
+      <div class="error-msg" id="errorMsg">Please fill in all fields.</div>
+
+      <div class="input-group">
+        <span class="input-icon">📧</span>
+        <input class="form-input" type="email" id="emailInput" placeholder="Email address">
       </div>
 
-      <h1 class="auth-title">Welcome Back</h1>
-      <p class="auth-sub">New to stackly? <a href="signup.html">Create a free account</a></p>
+      <div class="input-group">
+        <span class="input-icon">🔒</span>
+        <input class="form-input" type="password" id="pwInput" placeholder="Password">
+        <button class="pw-toggle" onclick="togglePw()" id="pwToggle">👁</button>
+      </div>
+
+      <div class="form-row">
+        <label class="remember-label"><input type="checkbox" id="rememberMe"> Remember me</label>
+        <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button class="login-btn" id="loginBtn" style="background:var(--green);color:#000" onclick="doLogin()">
+        <span id="loginBtnText">LOGIN</span>
+        <div class="spinner" id="loginSpinner"></div>
+      </button>
+
+      <div class="divider">— or continue with —</div>
 
       <div class="social-btns">
-        <button class="social-btn google" onclick="showToast('Google login coming soon!','info')"><i class="fab fa-google"></i> Google</button>
-        <button class="social-btn discord" onclick="showToast('Discord login coming soon!','info')"><i class="fab fa-discord"></i> Discord</button>
+        <button class="social-btn google" onclick="socialLogin('Google')">G Google</button>
+        <button class="social-btn discord" onclick="socialLogin('Discord')">⬡ Discord</button>
+        <button class="social-btn steam" onclick="socialLogin('Steam')">⊞ Steam</button>
       </div>
-      <div class="divider"><span>or continue with email</span></div>
 
-      <form id="loginForm" onsubmit="handleLogin(event)" novalidate>
-        <div class="field" id="f-email">
-          <label class="label">Email Address</label>
-          <div class="input-wrap">
-            <input type="email" class="input" id="email" placeholder="gamer@nexus.gg" autocomplete="email"/>
-            <i class="fa fa-envelope input-icon"></i>
-          </div>
-          <div class="input-err">Please enter a valid email address</div>
-        </div>
-
-        <div class="field" id="f-pass">
-          <label class="label">Password</label>
-          <div class="input-wrap">
-            <input type="password" class="input has-eye" id="password" placeholder="Enter your password" autocomplete="current-password"/>
-            <i class="fa fa-lock input-icon"></i>
-            <i class="fa fa-eye input-eye" id="eyeToggle" onclick="toggleEye()"></i>
-          </div>
-          <div class="input-err">Password must be at least 8 characters</div>
-        </div>
-
-        <div class="forgot"><a href="#">Forgot password?</a></div>
-
-        <label class="check-row">
-          <input type="checkbox" id="rememberMe" checked/>
-          <span>Keep me signed in for 30 days</span>
-        </label>
-
-        <button type="submit" class="btn-submit" id="loginBtn">
-          <span class="btn-text">Sign In to stackly</span>
-          <span class="spinner"></span>
-        </button>
-      </form>
-
-      <div class="auth-footer-note">By signing in you agree to our <a href="#">Terms of Service</a> &amp; <a href="#">Privacy Policy</a></div>
+      <div class="signup-link">Don't have an account? <a href="signup.html">Sign Up →</a></div>
     </div>
   </div>
 </div>
 
 <script>
-function showToast(msg,type='success'){
-  const w=document.getElementById('toastWrap');
-  const icons={success:'fa-check-circle',error:'fa-times-circle',info:'fa-info-circle'};
-  const t=document.createElement('div');t.className=`toast ${type}`;
-  t.innerHTML=`<i class="fa ${icons[type]}"></i><span>${msg}</span>`;
-  w.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(40px)';t.style.transition='all .35s';setTimeout(()=>t.remove(),400)},3000);
+// Canvas particles
+const canvas=document.getElementById('loginCanvas')
+const ctx=canvas.getContext('2d')
+function resizeCanvas(){canvas.width=canvas.parentElement.offsetWidth;canvas.height=canvas.parentElement.offsetHeight}
+resizeCanvas();window.addEventListener('resize',resizeCanvas)
+const pts=[];for(let i=0;i<100;i++)pts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,vx:(Math.random()-0.5)*0.4,vy:(Math.random()-0.5)*0.4,r:Math.random()*1.5+0.5})
+;(function draw(){ctx.clearRect(0,0,canvas.width,canvas.height);pts.forEach((p,i)=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>canvas.width)p.vx*=-1;if(p.y<0||p.y>canvas.height)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle='rgba(124,58,237,0.4)';ctx.fill();pts.slice(i+1).forEach(p2=>{const dx=p.x-p2.x,dy=p.y-p2.y,d=Math.sqrt(dx*dx+dy*dy);if(d<120){ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p2.x,p2.y);ctx.strokeStyle=`rgba(124,58,237,${0.2*(1-d/120)})`;ctx.lineWidth=0.5;ctx.stroke()}})});requestAnimationFrame(draw)})()
+
+// Role system
+let selectedRole='player'
+const roleData={
+  player:{color:'var(--green)',icon:'🎮',name:'PLAYER',tagline:'Compete. Rank up. Win prizes.',features:['Join unlimited tournaments','Global leaderboard ranking','Track KD, wins & earnings'],btnClass:'active-player'},
+  streamer:{color:'#bf5fff',icon:'📡',name:'STREAMER',tagline:'Stream. Grow. Monetize.',features:['Live streaming dashboard','Viewer analytics & chat','Revenue tracking & payouts'],btnClass:'active-streamer'},
+  admin:{color:'var(--red)',icon:'🛡️',name:'ADMIN',tagline:'Manage. Moderate. Control.',features:['Full platform management','User & report moderation','Real-time activity feed'],btnClass:'active-admin'},
+  organizer:{color:'var(--gold)',icon:'🏆',name:'ORGANIZER',tagline:'Create. Manage. Reward.',features:['Create custom tournaments','Bracket & prize management','Team registration tools'],btnClass:'active-organizer'}
 }
-function toggleEye(){
-  const i=document.getElementById('password');const e=document.getElementById('eyeToggle');
-  if(i.type==='password'){i.type='text';e.className='fa fa-eye-slash input-eye';}
-  else{i.type='password';e.className='fa fa-eye input-eye';}
+
+function selectRole(role){
+  selectedRole=role
+  const data=roleData[role]
+  // Reset all buttons
+  document.querySelectorAll('.role-btn').forEach(btn=>btn.className='role-btn')
+  document.getElementById('role'+role.charAt(0).toUpperCase()+role.slice(1)).className='role-btn '+data.btnClass
+  // Update preview
+  const preview=document.getElementById('rolePreview')
+  preview.style.borderColor=data.color
+  document.getElementById('previewIcon').textContent=data.icon
+  const nameEl=document.getElementById('previewName')
+  nameEl.textContent=data.name
+  nameEl.style.color=data.color
+  document.getElementById('previewTagline').textContent=data.tagline
+  const featuresEl=document.getElementById('previewFeatures')
+  featuresEl.innerHTML=data.features.map(f=>`<li>${f}</li>`).join('')
+  // Update login button color
+  const colors={player:'var(--green)',streamer:'#bf5fff',admin:'var(--red)',organizer:'var(--gold)'}
+  const textColors={player:'#000',streamer:'#fff',admin:'#fff',organizer:'#000'}
+  const btn=document.getElementById('loginBtn')
+  btn.style.background=colors[role]
+  btn.style.color=textColors[role]
+  // Animate preview
+  preview.style.opacity='0'
+  setTimeout(()=>preview.style.opacity='1',100)
+  preview.style.transition='opacity 0.3s,border-color 0.3s'
+  // Save role
+  localStorage.setItem('userRole',role)
 }
-function validateEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
-function setField(id,state){const f=document.getElementById(id);f.classList.remove('error','valid');if(state)f.classList.add(state)}
-function handleLogin(e){
-  e.preventDefault();
-  const email=document.getElementById('email').value.trim();
-  const pass=document.getElementById('password').value;
-  let ok=true;
-  if(!validateEmail(email)){setField('f-email','error');ok=false;}else setField('f-email','valid');
-  if(pass.length<8){setField('f-pass','error');ok=false;}else setField('f-pass','valid');
-  if(!ok){showToast('Please fix the errors above','error');return;}
-  const btn=document.getElementById('loginBtn');btn.classList.add('loading');btn.disabled=true;
+selectRole('player')
+
+function togglePw(){
+  const input=document.getElementById('pwInput')
+  input.type=input.type==='password'?'text':'password'
+}
+
+function doLogin(){
+  const email=document.getElementById('emailInput').value.trim()
+  const pw=document.getElementById('pwInput').value.trim()
+  const errEl=document.getElementById('errorMsg')
+  if(!email||!pw){errEl.textContent='Please fill in all fields.';errEl.classList.add('show');return}
+  if(!email.includes('@')){errEl.textContent='Please enter a valid email.';errEl.classList.add('show');return}
+  errEl.classList.remove('show')
+  // Show spinner
+  document.getElementById('loginBtnText').textContent='LOGGING IN...'
+  document.getElementById('loginSpinner').style.display='block'
+  document.getElementById('loginBtn').disabled=true
   setTimeout(()=>{
-    btn.classList.remove('loading');btn.disabled=false;
-    showToast('Welcome back! Redirecting to dashboard...','success');
-    setTimeout(()=>window.location.href='dashboard.html',1500);
-  },2000);
+    localStorage.setItem('userEmail',email)
+    localStorage.setItem('userName',email.split('@')[0])
+    localStorage.setItem('userRole',selectedRole)
+    const redirectMap={player:'dashboard-player.html',streamer:'dashboard-streamer.html',admin:'admin-dashboard.html',organizer:'dashboard-organizer.html'}
+    window.location.href=redirectMap[selectedRole]
+  },1200)
 }
-// Particles
-(function(){const c=document.getElementById('cvs'),ctx=c.getContext('2d');let W,H,pts=[];
-function rs(){W=c.width=innerWidth;H=c.height=innerHeight}rs();onresize=rs;
-for(let i=0;i<80;i++)pts.push({x:Math.random()*1920,y:Math.random()*1080,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4,r:Math.random()*1.2+.4,a:Math.random()*.5+.2});
-(function loop(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,212,255,${p.a})`;ctx.fill()});requestAnimationFrame(loop)})()})();
+
+function socialLogin(provider){
+  document.getElementById('emailInput').value=provider.toLowerCase()+'@nexusarena.gg'
+  document.getElementById('pwInput').value='socialauth123'
+  doLogin()
+}
+
+// Enter key
+document.getElementById('pwInput').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()})
+document.getElementById('emailInput').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('pwInput').focus()})
 </script>
 </body>
 </html>
