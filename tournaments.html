@@ -11,6 +11,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
 :root{
@@ -96,7 +98,7 @@ h1,h2,h3,h4{font-family:'Orbitron','Rajdhani',sans-serif;letter-spacing:.02em;li
 .stat .n{font-family:'Orbitron',sans-serif;font-size:38px;font-weight:900;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
 .stat .l{color:var(--muted);font-size:12px;letter-spacing:.18em;text-transform:uppercase;margin-top:6px}
 /* section */
-section{padding:90px 0;position:relative}
+section{padding:40px 0;position:relative}
 .section-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:40px;gap:20px;flex-wrap:wrap}
 .section-head h2{font-size:clamp(28px,3.4vw,46px);font-weight:900;text-transform:uppercase}
 .section-head .sub{color:var(--muted);max-width:520px;margin-top:8px}
@@ -262,7 +264,7 @@ textarea:focus{outline:none;border-color:var(--primary);box-shadow:var(--glow-bl
 .faq-item.open .faq-q span{transform:rotate(45deg)}
 .faq-q span{transition:.3s;font-size:22px;color:var(--primary)}
 /* footer */
-footer{padding:70px 0 30px;border-top:1px solid var(--border);margin-top:60px;background:linear-gradient(180deg,transparent,rgba(0,212,255,.03))}
+footer{padding:70px 0 30px;border-top:1px solid var(--border);margin-top:0px;background:linear-gradient(180deg,transparent,rgba(0,212,255,.03))}
 .foot-grid{display:grid;grid-template-columns:1.5fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
 .foot-grid h5{font-size:13px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:16px;color:#fff}
 .foot-grid a{display:block;color:var(--muted);padding:6px 0;font-size:14px;transition:.2s}
@@ -389,7 +391,12 @@ document.querySelectorAll('.chart').forEach(ch=>{for(let i=0;i<14;i++){const b=d
     <img src="./assets/stackly-colormix-logo.png" alt="gaming-logo" class="logo-img">
 </a>
 <p style="color:var(--muted);font-size:14px;margin-top:14px;line-height:1.7">The next-generation stackly gaming platform — discover, compete, stream, and connect with gamers worldwide.</p>
-<div class="socials" style="margin-top:18px"><a href="#">𝕏</a><a href="#">📷</a><a href="#">▶</a><a href="#">𝔻</a></div></div>
+<div class="socials" style="margin-top:18px">
+  <a href="#"><i class="fa-brands fa-x-twitter"></i></a>
+  <a href="#"><i class="fa-brands fa-instagram"></i></a>
+  <a href="#"><i class="fa-brands fa-youtube"></i></a>
+  <a href="#"><i class="fa-brands fa-discord"></i></a>
+</div></div>
 <div><h5>Platform</h5><a href="games.html">Games</a><a href="tournaments.html">Tournaments</a><a href="esports.html">Esports</a><a href="store.html">Store</a></div>
 <div><h5>Community</h5><a href="community.html">Leaderboard</a><a href="news.html">News</a><a href="#">Forums</a><a href="#">Discord</a></div>
 <div><h5>Company</h5><a href="about.html">About</a><a href="contact.html">Contact</a><a href="#">Careers</a><a href="#">Press Kit</a></div>
