@@ -90,6 +90,27 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
 .error-msg{background:rgba(255,68,68,0.1);border:1px solid rgba(255,68,68,0.3);border-radius:8px;padding:10px 14px;font-size:0.82rem;color:var(--red);display:none}
 .error-msg.show{display:block}
 
+.back-link{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  color:var(--muted);
+  text-decoration:none;
+  font-size:.9rem;
+  padding:8px 14px;
+  border:1px solid var(--border);
+  border-radius:10px;
+  background:rgba(255,255,255,.03);
+  transition:.3s;
+}
+
+.back-link:hover{
+  color:var(--purple);
+  border-color:var(--purple);
+  box-shadow:0 0 20px rgba(124,58,237,.4);
+  transform:translateX(-3px);
+}
+
 /* MOBILE STACK */
 @media(max-width:768px){.login-wrap{flex-direction:column}}
 </style>
@@ -97,6 +118,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
 <body>
 
 <div class="top-bar">
+  <a href="index.html" class="back-link">
+    ← Go Back
+  </a>
   <!-- <a href="index.html">
       <img src="./assets/stackly-colormix-logo.png" alt="grocery store Logo" class="logo-img">
   </a> -->
@@ -110,7 +134,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
   <div class="left-panel">
     <div>
       <div class="role-heading">SELECT YOUR ROLE</div>
-      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem">Choose your identity on Nexus Arena</p>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:1.25rem">Choose your identity on Stackly Gaming</p>
     </div>
 
     <button class="role-btn active-player" id="rolePlayer" onclick="selectRole('player')">
@@ -148,6 +172,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
     <a href="index.html">
       <img src="./assets/stackly-colormix-logo.png" alt="grocery store Logo" class="logo-img">
     </a>
+    
     <div class="form-title">Welcome Back</div>
     <div class="form-sub">Sign in to your account to continue</div>
 
@@ -167,7 +192,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
 
       <div class="form-row">
         <label class="remember-label"><input type="checkbox" id="rememberMe"> Remember me</label>
-        <a href="#" class="forgot-link">Forgot password?</a>
+        <a href="error.html" class="forgot-link">Forgot password?</a>
       </div>
 
       <button class="login-btn" id="loginBtn" style="background:var(--green);color:#000" onclick="doLogin()">
@@ -178,9 +203,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
       <div class="divider">— or continue with —</div>
 
       <div class="social-btns">
-        <button class="social-btn google" onclick="socialLogin('Google')">G Google</button>
-        <button class="social-btn discord" onclick="socialLogin('Discord')">⬡ Discord</button>
-        <button class="social-btn steam" onclick="socialLogin('Steam')">⊞ Steam</button>
+        <button class="social-btn google" onclick="socialLogin()">G Google</button>
+        <button class="social-btn discord" onclick="socialLogin()">⬡ Discord</button>
+        <button class="social-btn steam" onclick="socialLogin()">⊞ Steam</button>
       </div>
 
       <div class="signup-link">Don't have an account? <a href="signup.html">Sign Up →</a></div>
@@ -247,8 +272,13 @@ function doLogin(){
   const pw=document.getElementById('pwInput').value.trim()
   const errEl=document.getElementById('errorMsg')
   if(!email||!pw){errEl.textContent='Please fill in all fields.';errEl.classList.add('show');return}
-  if(!email.includes('@')){errEl.textContent='Please enter a valid email.';errEl.classList.add('show');return}
-  errEl.classList.remove('show')
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if(!emailRegex.test(email)){
+  errEl.textContent='Please enter a valid email address.';
+  errEl.classList.add('show');
+  return;
+}  errEl.classList.remove('show')
   // Show spinner
   document.getElementById('loginBtnText').textContent='LOGGING IN...'
   document.getElementById('loginSpinner').style.display='block'
@@ -262,10 +292,8 @@ function doLogin(){
   },1200)
 }
 
-function socialLogin(provider){
-  document.getElementById('emailInput').value=provider.toLowerCase()+'@nexusarena.gg'
-  document.getElementById('pwInput').value='socialauth123'
-  doLogin()
+function socialLogin(){
+  window.location.href='error.html'
 }
 
 // Enter key

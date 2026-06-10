@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>404 — Page Not Found · STACKLY Gaming</title>
+<meta name="description" content="Oops! This page doesn't exist. Head back to STACKLY Gaming."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{
+  --primary:#00D4FF;--secondary:#8B5CF6;--accent:#00FFF0;
+  --bg:#050505;--surface:#0B1120;--card:rgba(255,255,255,0.05);
+  --border:rgba(255,255,255,0.08);--text:#fff;--muted:#94A3B8;
+  --glow-blue:0 0 24px rgba(0,212,255,.55);
+  --glow-purple:0 0 24px rgba(139,92,246,.55);
+  --glow-cyan:0 0 24px rgba(0,255,240,.55);
+  --grad:linear-gradient(135deg,#00D4FF 0%,#8B5CF6 60%,#00FFF0 100%);
+}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter','Segoe UI',system-ui,sans-serif;scroll-behavior:smooth;overflow-x:hidden;min-height:100vh}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;display:block}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3,h4{font-family:'Orbitron','Rajdhani',sans-serif;letter-spacing:.02em;line-height:1.1}
+.container{max-width:1400px;margin:0 auto;padding:0 28px}
+
+/* BG */
+.bg-orbs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.bg-orbs::before,.bg-orbs::after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;filter:blur(120px);opacity:.45;animation:float 18s ease-in-out infinite}
+.bg-orbs::before{background:#00D4FF;top:-180px;left:-120px}
+.bg-orbs::after{background:#8B5CF6;bottom:-200px;right:-120px;animation-delay:-9s}
+.bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.04) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+@keyframes float{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
+#particles{position:fixed;inset:0;z-index:-1;pointer-events:none}
+
+/* LOADER */
+.loader{position:fixed;inset:0;background:#050505;display:grid;place-items:center;z-index:9999;transition:.6s;gap:18px}
+.loader.hide{opacity:0;visibility:hidden}
+.loader .ring{width:70px;height:70px;border-radius:50%;border:3px solid rgba(0,212,255,.15);border-top-color:var(--primary);animation:spin 1s linear infinite}
+.loader .lt{font-family:'Orbitron',sans-serif;letter-spacing:.4em;font-size:13px;color:var(--muted)}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+
+
+/* 404 MAIN */
+.error-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:60px 24px;position:relative;overflow:hidden}
+
+/* big glowing 404 text behind */
+.error-bg-num{position:absolute;font-family:'Orbitron',sans-serif;font-size:clamp(200px,28vw,420px);font-weight:900;color:transparent;-webkit-text-stroke:1px rgba(0,212,255,.07);letter-spacing:-.04em;user-select:none;pointer-events:none;top:50%;left:50%;transform:translate(-50%,-50%);white-space:nowrap;z-index:0;animation:bgPulse 4s ease-in-out infinite}
+@keyframes bgPulse{0%,100%{-webkit-text-stroke-color:rgba(0,212,255,.07)}50%{-webkit-text-stroke-color:rgba(139,92,246,.12)}}
+
+/* scan lines */
+.scan-lines{position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,212,255,.012) 3px,rgba(0,212,255,.012) 4px);pointer-events:none;z-index:1;animation:scanMove 8s linear infinite}
+@keyframes scanMove{0%{background-position:0 0}100%{background-position:0 100%}}
+
+/* glitch overlay left / right */
+.glitch-orb{position:absolute;width:600px;height:600px;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0}
+.glitch-orb.l{background:rgba(0,212,255,.09);top:-120px;left:-160px;animation:gOrbL 10s ease-in-out infinite}
+.glitch-orb.r{background:rgba(139,92,246,.09);bottom:-120px;right:-160px;animation:gOrbL 8s ease-in-out infinite reverse}
+@keyframes gOrbL{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(30px,-20px) scale(1.08)}}
+
+.error-inner{position:relative;z-index:2;text-align:center;max-width:680px}
+
+/* animated 404 number */
+.num-404{font-family:'Orbitron',sans-serif;font-size:clamp(90px,16vw,180px);font-weight:900;line-height:1;margin-bottom:10px;position:relative;display:inline-block}
+.num-404 .n-solid{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent;position:relative;z-index:2;animation:glitch 6s infinite}
+/* glitch effect */
+.num-404::before,.num-404::after{content:"404";position:absolute;inset:0;font-family:'Orbitron',sans-serif;font-size:inherit;font-weight:900;line-height:1;-webkit-background-clip:text;background-clip:text;color:transparent;z-index:1}
+.num-404::before{background:linear-gradient(135deg,#FF0080,#FF6B00);clip-path:polygon(0 0,100% 0,100% 38%,0 38%);animation:glitchTop 6s infinite;transform:translateX(-2px)}
+.num-404::after{background:linear-gradient(135deg,#00FFF0,#00D4FF);clip-path:polygon(0 62%,100% 62%,100% 100%,0 100%);animation:glitchBot 6s infinite;transform:translateX(2px)}
+@keyframes glitch{0%,90%{transform:skewX(0)}92%{transform:skewX(-1.5deg)}94%{transform:skewX(1.5deg)}96%{transform:skewX(-1deg)}98%{transform:skewX(.8deg)}100%{transform:skewX(0)}}
+@keyframes glitchTop{0%,90%{transform:translateX(-2px);opacity:0}92%,96%{transform:translateX(-4px);opacity:.7}94%{transform:translateX(3px);opacity:.5}100%{opacity:0}}
+@keyframes glitchBot{0%,90%{transform:translateX(2px);opacity:0}93%,97%{transform:translateX(4px);opacity:.7}95%{transform:translateX(-3px);opacity:.5}100%{opacity:0}}
+
+/* status badge */
+.status-badge{display:inline-flex;align-items:center;gap:8px;padding:7px 16px;border-radius:999px;background:rgba(255,0,80,.1);border:1px solid rgba(255,0,80,.3);color:#ff6b9b;font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:700;margin-bottom:22px}
+.status-badge .dot{width:7px;height:7px;border-radius:50%;background:#ff2d55;box-shadow:0 0 8px #ff2d55;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+
+/* heading */
+.error-title{font-size:clamp(22px,3.5vw,38px);font-weight:900;text-transform:uppercase;margin-bottom:14px;letter-spacing:.03em}
+.error-title .grad{background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* sub text */
+.error-sub{color:var(--muted);font-size:16px;line-height:1.7;max-width:500px;margin:0 auto 32px}
+
+/* terminal box */
+.terminal{background:rgba(0,0,0,.5);border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:20px 24px;margin:0 auto 36px;max-width:460px;text-align:left;font-family:'Courier New',monospace;backdrop-filter:blur(20px)}
+.term-head{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.term-dot{width:12px;height:12px;border-radius:50%}
+.term-dot:nth-child(1){background:#ff5f57}
+.term-dot:nth-child(2){background:#ffbd2e}
+.term-dot:nth-child(3){background:#28c840}
+.term-title{font-family:'Orbitron',sans-serif;font-size:11px;color:var(--muted);letter-spacing:.15em;margin-left:auto}
+.term-line{font-size:13px;line-height:1.8;color:var(--muted)}
+.term-line .prompt{color:var(--primary)}
+.term-line .cmd{color:#fff}
+.term-line .error-msg{color:#ff6b9b}
+.term-line .ok{color:var(--accent)}
+.cursor{display:inline-block;width:8px;height:14px;background:var(--primary);margin-left:2px;vertical-align:middle;animation:blink .8s step-end infinite}
+
+/* action buttons */
+/* ── ACTION BUTTONS ── */
+.error-actions{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:48px}
+
+/* shared base */
+.err-btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;padding:16px 36px;border-radius:14px;font-family:'Orbitron',sans-serif;font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;overflow:hidden;border:none;text-decoration:none;transition:transform .3s ease,box-shadow .3s ease;outline:none;min-width:190px}
+
+/* ripple */
+.err-btn .ripple-fx{position:absolute;border-radius:50%;transform:scale(0);background:rgba(255,255,255,.28);animation:rippleAnim .65s linear;pointer-events:none}
+@keyframes rippleAnim{to{transform:scale(5);opacity:0}}
+
+/* particle burst container */
+.err-btn .burst{position:absolute;inset:0;pointer-events:none;overflow:visible}
+.err-btn .bp{position:absolute;width:5px;height:5px;border-radius:50%;opacity:0}
+
+/* icon wrapper */
+.err-btn .btn-icon{display:grid;place-items:center;width:32px;height:32px;border-radius:9px;transition:transform .35s ease,background .3s}
+.err-btn .btn-label{position:relative;z-index:1}
+
+/* ── HOME BUTTON (cyan gradient) */
+.btn-home{background:linear-gradient(135deg,#00D4FF 0%,#0099CC 100%);color:#04111e;box-shadow:0 8px 30px rgba(0,212,255,.4),0 0 0 0 rgba(0,212,255,.3)}
+.btn-home::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.25),transparent 60%);opacity:0;transition:opacity .3s}
+.btn-home::after{content:"";position:absolute;inset:-2px;border-radius:16px;background:linear-gradient(135deg,#00D4FF,#8B5CF6,#00FFF0);z-index:-1;opacity:0;transition:opacity .4s;animation:borderSpin 3s linear infinite}
+@keyframes borderSpin{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+.btn-home:hover{transform:translateY(-5px) scale(1.04);box-shadow:0 18px 50px rgba(0,212,255,.55),0 0 40px rgba(0,212,255,.3),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn-home:hover::before{opacity:1}
+.btn-home:hover::after{opacity:1}
+.btn-home:hover .btn-icon{transform:rotate(-12deg) scale(1.2);background:rgba(4,17,30,.2)}
+.btn-home:active{transform:translateY(-2px) scale(.98)}
+.btn-home .btn-icon{background:rgba(4,17,30,.15)}
+/* scanning shimmer */
+.btn-home .shimmer{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);animation:shimmerMove 2.5s ease-in-out infinite}
+@keyframes shimmerMove{0%{left:-100%}60%,100%{left:150%}}
+
+/* ── GO BACK BUTTON (ghost with purple glow) */
+.btn-back-custom{background:rgba(139,92,246,.06);color:#E2EAF4;border:1.5px solid rgba(139,92,246,.35);box-shadow:0 4px 20px rgba(139,92,246,.15),inset 0 1px 0 rgba(255,255,255,.05)}
+.btn-back-custom::before{content:"";position:absolute;inset:0;border-radius:14px;background:linear-gradient(135deg,rgba(139,92,246,.15),rgba(0,212,255,.08));opacity:0;transition:opacity .35s}
+.btn-back-custom:hover{transform:translateY(-5px) scale(1.04);color:#fff;border-color:rgba(139,92,246,.8);box-shadow:0 18px 50px rgba(139,92,246,.4),0 0 0 1px rgba(139,92,246,.5),inset 0 1px 0 rgba(255,255,255,.1)}
+.btn-back-custom:hover::before{opacity:1}
+.btn-back-custom:hover .btn-icon{transform:translateX(-5px) scale(1.2);color:var(--secondary);background:rgba(139,92,246,.2)}
+.btn-back-custom:active{transform:translateY(-2px) scale(.98)}
+.btn-back-custom .btn-icon{background:rgba(139,92,246,.1);color:var(--secondary);transition:transform .35s ease,background .3s,color .3s}
+/* pulsing border glow on hover */
+.btn-back-custom::after{content:"";position:absolute;inset:-1px;border-radius:15px;background:linear-gradient(135deg,rgba(139,92,246,.6),rgba(0,212,255,.4));z-index:-1;opacity:0;transition:opacity .35s;filter:blur(8px)}
+.btn-back-custom:hover::after{opacity:1}
+
+/* quick links */
+.quick-links-title{font-size:12px;color:var(--muted);letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+.quick-links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.ql-item{display:flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;background:var(--card);border:1px solid var(--border);font-size:13px;font-weight:600;transition:.25s;backdrop-filter:blur(12px)}
+.ql-item i{color:var(--primary);font-size:14px}
+.ql-item:hover{border-color:var(--primary);color:var(--primary);box-shadow:var(--glow-blue);transform:translateY(-3px)}
+
+/* floating decorative elements */
+.deco{position:absolute;pointer-events:none;z-index:1}
+.deco.d1{top:14%;left:6%;animation:decoFloat 7s ease-in-out infinite}
+.deco.d2{top:22%;right:8%;animation:decoFloat 5s ease-in-out infinite reverse}
+.deco.d3{bottom:18%;left:10%;animation:decoFloat 9s ease-in-out infinite 2s}
+.deco.d4{bottom:22%;right:6%;animation:decoFloat 6s ease-in-out infinite 1s}
+@keyframes decoFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-16px) rotate(6deg)}}
+.deco-card{background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:14px;padding:14px 18px;backdrop-filter:blur(12px);white-space:nowrap}
+.deco-card .dc-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.12em;margin-bottom:4px}
+.deco-card .dc-val{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
+.deco-card .dc-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+
+
+/* RESPONSIVE */
+
+  .foot-grid{grid-template-columns:1fr}
+  .error-bg-num{font-size:180px}
+  .deco{display:none}
+  .terminal{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div class="loader" id="loader">
+  <div class="ring"></div>
+  <div class="lt">STACKLY // LOADING</div>
+</div>
+
+<!-- BG -->
+<div class="bg-orbs"></div>
+<div class="bg-grid"></div>
+<canvas id="particles"></canvas>
+
+
+
+<!-- 404 CONTENT -->
+<main class="error-wrap">
+
+  <!-- background giant 404 -->
+  <div class="error-bg-num">404</div>
+  <!-- scan lines overlay -->
+  <div class="scan-lines"></div>
+  <!-- glitch orbs -->
+  <div class="glitch-orb l"></div>
+  <div class="glitch-orb r"></div>
+
+  <!-- decorative floating cards -->
+  <div class="deco d1">
+    <div class="deco-card">
+      <div class="dc-label">Error Code</div>
+      <div class="dc-val">ERR_404</div>
+      <div class="dc-sub">Page Not Found</div>
+    </div>
+  </div>
+  <div class="deco d2">
+    <div class="deco-card">
+      <div class="dc-label">Last Seen</div>
+      <div class="dc-val">NULL</div>
+      <div class="dc-sub">Route missing</div>
+    </div>
+  </div>
+  <div class="deco d3">
+    <div class="deco-card">
+      <div class="dc-label">Players Online</div>
+      <div class="dc-val">1.2M+</div>
+      <div class="dc-sub">Active right now</div>
+    </div>
+  </div>
+  <div class="deco d4">
+    <div class="deco-card">
+      <div class="dc-label">Status</div>
+      <div class="dc-val">LOST</div>
+      <div class="dc-sub">Respawn in lobby</div>
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT -->
+  <div class="error-inner">
+
+    <!-- status pill -->
+    <div class="status-badge">
+      <span class="dot"></span>
+      Error 404 · Page Not Found
+    </div>
+
+    <!-- glitch number -->
+    <div class="num-404"><span class="n-solid">404</span></div>
+
+    <!-- heading -->
+    <h1 class="error-title">
+      You've Been <span class="grad">Eliminated</span>
+    </h1>
+
+    <!-- sub text -->
+    <p class="error-sub">
+      Looks like this page respawned somewhere else — or never existed.
+      The map has shifted. Head back to the lobby and try again, champion.
+    </p>
+
+    <!-- TERMINAL BOX -->
+    <div class="terminal">
+      <div class="term-head">
+        <span class="term-dot"></span>
+        <span class="term-dot"></span>
+        <span class="term-dot"></span>
+        <span class="term-title">NEXUS // SYSTEM TERMINAL</span>
+      </div>
+      <div class="term-line"><span class="prompt">nexus@server:~$</span> <span class="cmd">GET /<span id="pathDisplay">unknown</span></span></div>
+      <div class="term-line"><span class="error-msg">→ ERROR: Route not found in registry</span></div>
+      <div class="term-line"><span class="prompt">nexus@server:~$</span> <span class="cmd">ping stackly.gg</span></div>
+      <div class="term-line"><span class="ok">→ Platform online · All systems operational ✓</span></div>
+                </div>
+
+    <!-- ACTION BUTTONS -->
+    <div class="error-actions">
+      <a href="index.html" class="btn btn-primary btn-lg">
+        <i class="fa fa-home"></i> Back to Home
+      </a>
+      <button class="btn btn-ghost btn-lg" onclick="history.back()">
+        <i class="fa fa-arrow-left"></i> Go Back
+      </button>
+    </div>
+
+    <!-- QUICK LINKS -->
+    <div class="quick-links-title">Or jump to a section</div>
+    <div class="quick-links">
+      <a href="games.html" class="ql-item"><i class="fa fa-gamepad"></i> Games</a>
+      <a href="tournaments.html" class="ql-item"><i class="fa fa-trophy"></i> Tournaments</a>
+      <a href="store.html" class="ql-item"><i class="fa fa-store"></i> Store</a>
+      <a href="news.html" class="ql-item"><i class="fa fa-newspaper"></i> News</a>
+      <a href="community.html" class="ql-item"><i class="fa fa-users"></i> Community</a>
+      <a href="login.html" class="ql-item"><i class="fa fa-user"></i> Login</a>
+    </div>
+
+  </div>
+</main>
+
+
+
+<script>
+/* ── LOADER */
+window.addEventListener('load', () =>
+  setTimeout(() => document.getElementById('loader')?.classList.add('hide'), 400)
+);
+
+
+/* ── PARTICLES */
+const canvas = document.getElementById('particles');
+if (canvas) {
+  const ctx = canvas.getContext('2d');
+  let w, h, ps = [];
+  function resize() { w = canvas.width = innerWidth; h = canvas.height = innerHeight; }
+  resize();
+  addEventListener('resize', resize);
+  for (let i = 0; i < 70; i++) ps.push({
+    x: Math.random() * 2000 % 1500,
+    y: Math.random() * 1000,
+    r: Math.random() * 1.8 + .4,
+    vx: (Math.random() - .5) * .3,
+    vy: (Math.random() - .5) * .3,
+    c: ['#00D4FF','#8B5CF6','#00FFF0'][Math.floor(Math.random()*3)]
+  });
+  function tick() {
+    ctx.clearRect(0, 0, w, h);
+    ps.forEach(p => {
+      p.x = (p.x + p.vx + w) % w;
+      p.y = (p.y + p.vy + h) % h;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.c;
+      ctx.globalAlpha = .5;
+      ctx.fill();
+    });
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+/* ── SHOW CURRENT PATH in terminal */
+const pathDisplay = document.getElementById('pathDisplay');
+if (pathDisplay) {
+  const path = window.location.pathname.split('/').pop() || 'unknown';
+  pathDisplay.textContent = path || 'unknown';
+}
+
+
+/* ── PARALLAX on mouse move */
+document.addEventListener('mousemove', e => {
+  const x = (e.clientX / innerWidth - .5) * 18;
+  const y = (e.clientY / innerHeight - .5) * 18;
+  document.querySelectorAll('.deco').forEach((el, i) => {
+    const depth = (i % 2 === 0 ? 1 : -1) * (i + 1) * .4;
+    el.style.transform = `translate(${x * depth}px, ${y * depth}px)`;
+  });
+});
+</script>
+</body>
+</html>
