@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Streamer Dashboard — STACKLY Gaming</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;-webkit-font-smoothing:antialiased}
+:root{--primary:#00D4FF;--secondary:#8B5CF6;--accent:#00FFF0;--bg:#050505;--surface:#0B1120;--card:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.08);--text:#fff;--muted:#94A3B8;--glow-blue:0 0 24px rgba(0,212,255,.55);--glow-purple:0 0 24px rgba(139,92,246,.55);--glow-cyan:0 0 24px rgba(0,255,240,.55);--grad:linear-gradient(135deg,#00D4FF 0%,#8B5CF6 60%,#00FFF0 100%);--danger:#ff2d55;--green:#00FF88;}
+html,body{background:var(--bg);color:var(--text);font-family:'Inter','Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden;width:100%;max-width:100%}
+a{color:inherit;text-decoration:none} button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+h1,h2,h3,h4{font-family:'Orbitron','Rajdhani',sans-serif;letter-spacing:.02em;line-height:1.1}
+.bg-orbs{position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none}
+.bg-orbs::before,.bg-orbs::after{content:"";position:absolute;width:520px;height:520px;border-radius:50%;filter:blur(120px);opacity:.3;animation:bgFloat 18s ease-in-out infinite}
+.bg-orbs::before{background:#00D4FF;top:-180px;left:-120px}
+.bg-orbs::after{background:#8B5CF6;bottom:-200px;right:-120px;animation-delay:-9s}
+.bg-grid{position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(0,212,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,212,255,.03) 1px,transparent 1px);background-size:60px 60px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+@keyframes bgFloat{0%,100%{transform:translate(0,0)}50%{transform:translate(40px,-30px)}}
+.loader{position:fixed;inset:0;background:#050505;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;z-index:9999;transition:.6s}
+.loader.hide{opacity:0;visibility:hidden}
+.loader .ring{width:70px;height:70px;border-radius:50%;border:3px solid rgba(0,212,255,.15);border-top-color:var(--primary);animation:spin 1s linear infinite}
+.loader .lt{font-family:'Orbitron',sans-serif;letter-spacing:.4em;font-size:13px;color:var(--muted)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast-wrap{position:fixed;top:20px;right:20px;z-index:600;display:flex;flex-direction:column;gap:10px}
+.toast{background:rgba(11,17,32,.95);border:1px solid var(--border);border-left:4px solid var(--primary);padding:14px 18px;border-radius:12px;min-width:260px;animation:tIn .35s ease;display:flex;gap:10px;align-items:center;font-size:14px;font-weight:600;backdrop-filter:blur(20px)}
+.toast.error{border-left-color:var(--danger)}.toast.success{border-left-color:var(--green)}.toast.info{border-left-color:var(--accent)}
+@keyframes tIn{from{opacity:0;transform:translateX(40px)}to{opacity:1;transform:translateX(0)}}
+.dash-layout{display:flex;min-height:100vh}
+.sidebar{width:260px;min-height:100vh;background:rgba(11,17,32,.9);border-right:1px solid var(--border);backdrop-filter:blur(20px);display:flex;flex-direction:column;position:fixed;left:0;top:0;bottom:0;z-index:100;transition:transform .35s;overflow-y:auto}
+@media(max-width:1024px){.sidebar{transform:translateX(-100%);width:280px}}
+.sidebar.open{transform:translateX(0)}
+.sb-logo{padding:18px 20px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+.sb-logo img, .sb-logo svg{width:140px;height:auto}
+.logo-img{width:140px;height:auto}
+.sb-user{padding:14px 20px;border-bottom:1px solid var(--border)}
+.sb-role-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.2);font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:var(--primary);font-weight:700;margin-bottom:10px}
+.sb-user-row{display:flex;align-items:center;gap:12px}
+.sb-ava{width:44px;height:44px;border-radius:50%;background:var(--grad);display:grid;place-items:center;font-size:20px;flex-shrink:0;box-shadow:var(--glow-blue)}
+.sb-uname{font-weight:700;font-size:14px;margin-bottom:2px}
+.sb-email{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:150px}
+.sb-nav{flex:1;padding:12px 10px}
+.sb-sec{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:10px 10px 4px;margin-top:6px}
+.sb-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:13px;color:#94A3B8;margin-bottom:2px;transition:.25s;cursor:pointer;position:relative;text-decoration:none}
+.sb-link i{width:18px;text-align:center}
+.sb-link:hover{background:rgba(0,212,255,.07);color:#fff}
+.sb-link.active{background:rgba(0,212,255,.1);color:var(--primary)}
+.sb-badge{margin-left:auto;background:var(--danger);color:#fff;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px}
+.sb-footer{padding:12px;border-top:1px solid var(--border)}
+.sb-logout{display:flex;align-items:center;gap:10px;padding:11px 12px;border-radius:10px;font-size:13px;color:var(--muted);transition:.25s;cursor:pointer;width:100%}
+.sb-logout:hover{background:rgba(255,45,85,.08);color:var(--danger)}
+.sb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:99;display:none}
+.sb-overlay.show{display:block}
+.main-content{flex:1;margin-left:260px;min-height:100vh;display:flex;flex-direction:column}
+@media(max-width:1024px){.main-content{margin-left:0}}
+.topbar{background:rgba(5,5,10,.8);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;overflow-x:hidden}
+@media(max-width:600px){.topbar{padding:12px 16px}}
+.tb-left{display:flex;align-items:center;gap:12px;min-width:0}
+.mob-toggle{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:none;place-items:center;cursor:pointer;flex-shrink:0}
+@media(max-width:1024px){.mob-toggle{display:grid}}
+.tb-page{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:800;letter-spacing:.06em;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tb-right{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.noti-btn{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;position:relative;cursor:pointer}
+.noti-btn i{font-size:16px}
+.noti-btn::after{content:'';width:8px;height:8px;background:var(--danger);border-radius:50%;position:absolute;top:8px;right:8px}
+.tb-usr{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid var(--border);cursor:pointer}
+.tb-ava{width:32px;height:32px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:var(--glow-blue);font-size:16px;flex-shrink:0}
+.tb-name{font-size:12px;font-weight:600;display:none}
+@media(min-width:640px){.tb-name{display:block}}
+.cont-wrap{flex:1;overflow-y:auto;padding:24px;word-wrap:break-word}
+@media(max-width:768px){.cont-wrap{padding:16px}}
+.welcome-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;backdrop-filter:blur(20px);display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:16px}
+.wc-text h2{font-size:clamp(18px,4vw,28px);margin-bottom:8px}
+.wc-text p{color:var(--muted);font-size:14px;line-height:1.5}
+.grad{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.wc-right{display:flex;gap:12px;flex-wrap:wrap}
+.btn{padding:10px 16px;border-radius:10px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;cursor:pointer;transition:.25s;border:1px solid transparent}
+.btn-primary{background:var(--grad);color:#000;font-weight:700}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:var(--glow-blue)}
+.btn-ghost{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text)}
+.btn-ghost:hover{background:rgba(255,255,255,.1);border-color:var(--primary)}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;backdrop-filter:blur(20px);transition:.35s;position:relative;overflow:hidden}
+.kpi:hover{background:rgba(255,255,255,.08);border-color:rgba(0,212,255,.3);transform:translateY(-2px)}
+.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:var(--grad)}
+.kl{color:var(--muted);font-size:11px;letter-spacing:.15em;text-transform:uppercase;font-weight:600;margin-bottom:8px}
+.kn{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:8px 0}
+.kd{font-size:11px;color:var(--green);display:flex;align-items:center;gap:4px}
+.kd.neg{color:var(--danger)}
+.ki{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:28px;opacity:.12}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:24px}
+@media(max-width:768px){.panels{grid-template-columns:1fr;gap:16px}}
+.panel{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px;backdrop-filter:blur(20px);transition:.35s;word-wrap:break-word}
+.panel:hover{background:rgba(255,255,255,.08);border-color:rgba(0,212,255,.3)}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px}
+.pt{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:700;font-family:'Orbitron',sans-serif;min-width:0}
+.pt i{color:var(--primary);font-size:16px;flex-shrink:0}
+.pa{font-size:11px;color:var(--primary);cursor:pointer;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.pa:hover{color:var(--accent)}
+.tag{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:999px;background:rgba(0,255,136,.1);color:var(--green);font-size:10px;font-weight:700;letter-spacing:.06em}
+.tag-red{background:rgba(255,45,85,.1);color:var(--danger)}.tag-orange{background:rgba(251,191,36,.1);color:#fbbf24}.tag-blue{background:rgba(0,212,255,.1);color:var(--primary)}.tag-purple{background:rgba(139,92,246,.1);color:var(--secondary)}
+.act-row{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);align-items:center;flex-wrap:wrap}
+.act-ico{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.act-txt{flex:1;min-width:0;word-wrap:break-word}
+.log-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start}
+.log-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:14px}
+.log-txt{font-size:13px;color:#fff;margin-bottom:2px;word-wrap:break-word}
+.log-time{font-size:11px;color:var(--muted);white-space:nowrap}
+.prog-row{margin-bottom:18px}
+.prog-label{display:flex;justify-content:space-between;margin-bottom:8px;font-size:12px;font-weight:600;flex-wrap:wrap;gap:5px}
+.prog-bar{width:100%;height:6px;background:rgba(255,255,255,.05);border-radius:999px;overflow:hidden;border:1px solid var(--border)}
+.prog-fill{height:100%;background:var(--grad);transition:width .6s ease}
+.stream-badge{display:inline-flex;align-items:center;gap:4px;padding:6px 12px;border-radius:999px;background:rgba(255,45,85,.15);border:1px solid rgba(255,45,85,.3);color:var(--danger);font-size:10px;font-weight:700;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+
+</style>
+</head>
+<body>
+<div class="bg-orbs"></div>
+<div class="bg-grid"></div>
+<div id="loader" class="loader"><div class="ring"></div><div class="lt">STACKLY</div></div>
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="dash-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar" id="sidebar">
+    <!-- <div class="sb-logo"><svg viewBox="0 0 200 80" xmlns="http://www.w3.org/2000/svg" width="140"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#00D4FF;stop-opacity:1" /><stop offset="100%" style="stop-color:#8B5CF6;stop-opacity:1" /></linearGradient></defs><text x="20" y="65" font-family="Orbitron, Arial" font-size="48" font-weight="bold" fill="url(#grad1)">STACKLY</text></svg></div> -->
+     <a href="index.html">
+      <img src="./assets/stackly-colormix-logo.png" alt="grocery store Logo" class="logo-img">
+     </a>
+    <div class="sb-user">
+      <div class="sb-role-badge">📡 Streamer</div>
+      <div class="sb-user-row">
+        <div class="sb-ava" id="sbAva">🎬</div>
+        <div>
+          <div class="sb-uname" id="sbName">Streamer</div>
+          <div class="sb-email" id="sbEmail">streamer@email.com</div>
+        </div>
+      </div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-sec">Main</div>
+      <a class="sb-link active"><i class="fa fa-chart-bar"></i> Dashboard</a>
+      <a class="sb-link"><i class="fa fa-eye"></i> Live Monitor</a>
+      <a class="sb-link"><i class="fa fa-video"></i> Content Library</a>
+      <div class="sb-sec" style="margin-top:12px">Streaming</div>
+      <a class="sb-link"><i class="fa fa-signal"></i> Stream Settings</a>
+      <a class="sb-link"><i class="fa fa-users"></i> Subscribers<span class="sb-badge">142</span></a>
+      <a class="sb-link"><i class="fa fa-gift"></i> Donations</a>
+      <div class="sb-sec" style="margin-top:12px">Analytics</div>
+      <a class="sb-link"><i class="fa fa-chart-line"></i> Reports</a>
+      <a class="sb-link"><i class="fa fa-wallet"></i> Earnings</a>
+    </nav>
+    <div class="sb-footer">
+      <div class="sb-logout" onclick="logout()"><i class="fa fa-sign-out-alt"></i> Logout</div>
+    </div>
+  </div>
+  <div class="sb-overlay" id="sbOverlay" onclick="closeSidebar()"></div>
+  <!-- MAIN CONTENT -->
+  <div class="main-content">
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="tb-left">
+        <button class="mob-toggle" onclick="toggleSidebar()"><i class="fa fa-bars"></i></button>
+        <div class="tb-page">📡 STREAMER DASHBOARD</div>
+      </div>
+      <div class="tb-right">
+        <button class="noti-btn" onclick="showToast('Stream is live!','success')"><i class="fa fa-bell"></i></button>
+        <div class="tb-usr">
+          <div class="tb-ava" id="tbAva">🎬</div>
+          <div class="tb-name" id="tbEmail">streamer@email.com</div>
+        </div>
+      </div>
+    </div>
+    <!-- CONTENT -->
+    <div class="cont-wrap">
+      <!-- WELCOME CARD -->
+      <div class="welcome-card">
+        <div class="wc-text">
+          <h2>Stream Overview, <span class="grad" id="wcName">Streamer</span></h2>
+          <p>Status: LIVE • 2,847 viewers • 142 subscribers • $24.5K monthly revenue</p>
+        </div>
+        <div class="wc-right">
+          <button class="btn btn-primary" onclick="showToast('Stream settings opening','success')"><i class="fa fa-cog"></i> Settings</button>
+          <button class="btn btn-ghost" onclick="showToast('Analytics exported','success')"><i class="fa fa-download"></i> Export</button>
+        </div>
+      </div>
+
+      <!-- KPI GRID -->
+      <div class="kpi-grid">
+        <div class="kpi"><div class="kl">Hours Streamed</div><div class="kn" data-count="1243">0</div><div class="kd"><i class="fa fa-arrow-up"></i>+84 this month</div><div class="ki">⏰</div></div>
+        <div class="kpi"><div class="kl">Average Viewers</div><div class="kn" data-count="8742">0</div><div class="kd"><i class="fa fa-arrow-up"></i>+15% growth</div><div class="ki">👥</div></div>
+        <div class="kpi"><div class="kl">Total Earnings</div><div class="kn">$24.5K</div><div class="kd"><i class="fa fa-arrow-up"></i>+22% vs last month</div><div class="ki">💰</div></div>
+        <div class="kpi"><div class="kl">Total Subscribers</div><div class="kn" data-count="142">0</div><div class="kd"><i class="fa fa-arrow-up"></i>+18 new subs</div><div class="ki">🎯</div></div>
+      </div>
+
+      <div class="panels">
+        <div>
+          <!-- LIVE STREAMS -->
+          <div class="panel">
+            <div class="ph"><div class="pt"><i class="fa fa-video"></i> Recent Streams</div><span class="tag tag-blue" style="font-size:10px">Last 7 Days</span></div>
+            <div class="act-row">
+              <div class="act-ico" style="background:rgba(255,45,85,.12);color:var(--danger)"><i class="fa fa-circle"></i></div>
+              <div class="act-txt" style="flex:1">
+                <div style="font-weight:700;font-size:13px">LIVE NOW — Valorant Ranked <span class="stream-badge">● LIVE</span></div>
+                <div style="font-size:11px;color:var(--muted)">2,847 viewers · Streaming for 2h 14m</div>
+              </div>
+            </div>
+            <div class="act-row">
+              <div class="act-ico" style="background:rgba(0,212,255,.1);color:var(--primary)"><i class="fa fa-check"></i></div>
+              <div class="act-txt">
+                <div style="font-weight:700;font-size:13px">CS:GO Competitive Matches</div>
+                <div style="font-size:11px;color:var(--muted)">3,420 viewers · 4 hours ago</div>
+              </div>
+            </div>
+            <div class="act-row">
+              <div class="act-ico" style="background:rgba(0,255,136,.12);color:var(--green)"><i class="fa fa-check"></i></div>
+              <div class="act-txt">
+                <div style="font-weight:700;font-size:13px">Chill Gaming Session</div>
+                <div style="font-size:11px;color:var(--muted)">1,850 viewers · 1 day ago</div>
+              </div>
+            </div>
+            <div class="act-row">
+              <div class="act-ico" style="background:rgba(139,92,246,.1);color:var(--secondary)"><i class="fa fa-check"></i></div>
+              <div class="act-txt">
+                <div style="font-weight:700;font-size:13px">Tournament Finals Reaction</div>
+                <div style="font-size:11px;color:var(--muted)">5,214 viewers · 2 days ago</div>
+              </div>
+            </div>
+            <div class="act-row" style="border:none">
+              <div class="act-ico" style="background:rgba(251,191,36,.1);color:#fbbf24"><i class="fa fa-check"></i></div>
+              <div class="act-txt">
+                <div style="font-weight:700;font-size:13px">Pro Tips & Gameplay</div>
+                <div style="font-size:11px;color:var(--muted)">2,310 viewers · 3 days ago</div>
+              </div>
+            </div>
+          </div>
+          <!-- DONATIONS -->
+          <div class="panel" style="margin-top:24px">
+            <div class="ph"><div class="pt"><i class="fa fa-gift"></i> Recent Donations</div><span class="tag" style="font-size:10px">Today</span></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(0,255,136,.12);color:var(--green)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">SilentKnight88 → $50.00</div><div style="font-size:11px;color:var(--muted)">\"Great gameplay! Keep it up!\"</div></div></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(251,191,36,.12);color:#fbbf24"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">ProGamer_X → $25.00</div><div style="font-size:11px;color:var(--muted)">\"Best streamer ever!\"</div></div></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(0,212,255,.1);color:var(--primary)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">NinjaStrike42 → $100.00</div><div style="font-size:11px;color:var(--muted)">\"Your tournament strats are insane!\"</div></div></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(139,92,246,.12);color:var(--secondary)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">LegendaryAce → $50.00</div><div style="font-size:11px;color:var(--muted)">\"First time watching, love it!\"</div></div></div>
+            <div class="act-row" style="border:none"><div class="act-ico" style="background:rgba(255,45,85,.12);color:var(--danger)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">GhostWalker → $75.00</div><div style="font-size:11px;color:var(--muted)">\"Hyped for your team!\"</div></div></div>
+          </div>
+        </div>
+        <div>
+          <!-- PEAK HOURS -->
+          <div class="panel">
+            <div class="ph"><div class="pt"><i class="fa fa-chart-line"></i> Peak Hours Analysis</div><span class="tag tag-purple" style="font-size:10px">Last 30 Days</span></div>
+            <div class="prog-row"><div class="prog-label"><span>8PM - 10PM</span><span style="color:var(--primary)">Peak</span></div><div class="prog-bar"><div class="prog-fill" style="width:100%"></div></div></div>
+            <div class="prog-row"><div class="prog-label"><span>10PM - 12AM</span><span style="color:var(--primary)">88%</span></div><div class="prog-bar"><div class="prog-fill" style="width:88%"></div></div></div>
+            <div class="prog-row"><div class="prog-label"><span>6PM - 8PM</span><span style="color:var(--primary)">72%</span></div><div class="prog-bar"><div class="prog-fill" style="width:72%"></div></div></div>
+            <div class="prog-row"><div class="prog-label"><span>2PM - 4PM</span><span style="color:var(--primary)">45%</span></div><div class="prog-bar"><div class="prog-fill" style="width:45%"></div></div></div>
+            <div class="prog-row" style="margin-bottom:0"><div class="prog-label"><span>12PM - 2PM</span><span style="color:var(--primary)">28%</span></div><div class="prog-bar"><div class="prog-fill" style="width:28%"></div></div></div>
+          </div>
+          <!-- SUBSCRIPTIONS -->
+          <div class="panel" style="margin-top:24px">
+            <div class="ph"><div class="pt"><i class="fa fa-users"></i> Subscriber Tiers</div><span class="tag tag-green" style="font-size:10px">142 Total</span></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(0,255,136,.12);color:var(--green)"><i class="fa fa-circle"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">Tier 1 Subscribers</div><div style="font-size:11px;color:var(--muted)">87 subscribers · $4.99/month</div></div></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(251,191,36,.12);color:#fbbf24"><i class="fa fa-circle"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">Tier 2 Subscribers</div><div style="font-size:11px;color:var(--muted)">42 subscribers · $9.99/month</div></div></div>
+            <div class="act-row" style="border:none"><div class="act-ico" style="background:rgba(0,212,255,.1);color:var(--primary)"><i class="fa fa-circle"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">Tier 3 Subscribers</div><div style="font-size:11px;color:var(--muted)">13 subscribers · $24.99/month</div></div></div>
+          </div>
+          <!-- SPONSORSHIPS -->
+          <div class="panel" style="margin-top:24px">
+            <div class="ph"><div class="pt"><i class="fa fa-handshake"></i> Active Sponsorships</div><span class="tag tag-blue" style="font-size:10px">3 Partners</span></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(0,212,255,.1);color:var(--primary)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">Gaming Gear Co — Equipment</div><div style="font-size:11px;color:var(--muted)">Monthly: $2,000 + free gear</div></div></div>
+            <div class="act-row"><div class="act-ico" style="background:rgba(139,92,246,.1);color:var(--secondary)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">Energy Drink Brand — Stream Partner</div><div style="font-size:11px;color:var(--muted)">Monthly: $1,500 + products</div></div></div>
+            <div class="act-row" style="border:none"><div class="act-ico" style="background:rgba(0,255,136,.12);color:var(--green)"><i class="fa fa-star"></i></div><div class="act-txt"><div style="font-weight:700;font-size:13px">VPN Service — Affiliate Program</div><div style="font-size:11px;color:var(--muted)">Commission: 25% per signup</div></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+window.addEventListener('load',()=>setTimeout(()=>{document.getElementById('loader').classList.add('hide');if(typeof onDashLoad==='function')onDashLoad()},600));
+if(!localStorage.getItem('userEmail'))window.location.href='login.html';
+const _email=localStorage.getItem('userEmail')||'streamer@email.com';
+const _name=localStorage.getItem('userName')||'Streamer';
+const _ava=localStorage.getItem('userAvatar')||'🎬';
+['sbEmail','tbEmail'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=_email});
+['sbName'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=_name});
+['sbAva','tbAva'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=_ava});
+const wcn=document.getElementById('wcName');if(wcn)wcn.textContent=_name;
+function showToast(msg,type='success'){const w=document.getElementById('toastWrap');const ic={success:'fa-check-circle',error:'fa-times-circle',info:'fa-info-circle'};const t=document.createElement('div');t.className='toast '+type;t.innerHTML='<i class="fa '+ic[type]+'"></i><span>'+msg+'</span>';w.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(40px)';t.style.transition='all .35s';setTimeout(()=>t.remove(),400)},3200)}
+function toggleSidebar(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sbOverlay').classList.toggle('show')}
+function closeSidebar(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbOverlay').classList.remove('show')}
+function logout(){localStorage.clear();showToast('Signed out...','info');setTimeout(()=>window.location.href='index.html',1200)}
+function animCounters(){document.querySelectorAll('[data-count]').forEach(el=>{const t=+el.dataset.count,pre=el.dataset.pre||'',suf=el.dataset.suf||'';let c=0,s=t/60;const iv=setInterval(()=>{c=Math.min(c+s,t);el.textContent=pre+Math.floor(c).toLocaleString()+suf;if(c>=t)clearInterval(iv)},16)})}
+function onDashLoad(){animCounters()}
+</script>
+</body>
+</html>
