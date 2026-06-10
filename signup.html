@@ -195,8 +195,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
       <div class="step active" id="step1">
         <div class="input-group">
           <label class="input-label">Full Name</label>
-          <input class="form-input" type="text" id="fullName" placeholder="Arjun Sharma">
-          <div class="input-feedback" id="nameFb"></div>
+          <input class="form-input"
+                type="text"
+                id="fullName"
+                placeholder="Arjun Sharma"
+                oninput="validateName()">          <div class="input-feedback" id="nameFb"></div>
         </div>
         <div class="input-group">
           <label class="input-label">Email Address</label>
@@ -298,7 +301,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;anima
       </svg>
       <div class="success-title">Account Created!</div>
       <div class="success-sub" id="successMsg">Welcome to stackly! Your account is ready.</div>
-      <button class="btn-dashboard" onclick="goToDashboard()">Go to Dashboard →</button>
+      <button class="btn-dashboard" onclick="goToDashboard()">Go to LoginPage →</button>
     </div>
   </div>
 </div>
@@ -327,6 +330,34 @@ function validateEmail(){
   if(!val){el.textContent='';input.classList.remove('valid','invalid');return}
   if(valid){el.textContent='✓ Valid email';el.className='input-feedback feedback-ok';input.classList.add('valid');input.classList.remove('invalid')}
   else{el.textContent='✗ Invalid email format';el.className='input-feedback feedback-err';input.classList.add('invalid');input.classList.remove('valid')}
+
+  
+}
+
+function validateName(){
+  const name = document.getElementById('fullName').value.trim();
+  const fb = document.getElementById('nameFb');
+  const input = document.getElementById('fullName');
+
+  const namePattern = /^[A-Za-z\s]+$/;
+
+  if(!name){
+    fb.textContent='';
+    input.classList.remove('valid','invalid');
+    return;
+  }
+
+  if(namePattern.test(name)){
+    fb.textContent='✓ Valid name';
+    fb.className='input-feedback feedback-ok';
+    input.classList.add('valid');
+    input.classList.remove('invalid');
+  }else{
+    fb.textContent='✗ Only alphabets and spaces allowed';
+    fb.className='input-feedback feedback-err';
+    input.classList.add('invalid');
+    input.classList.remove('valid');
+  }
 }
 
 function checkStrength(){
@@ -374,7 +405,20 @@ function nextStep(from){
     const email=document.getElementById('emailInput').value.trim()
     const pw=document.getElementById('pwInput').value
     const cpw=document.getElementById('confirmPw').value
-    if(!name){document.getElementById('nameFb').textContent='✗ Name required';document.getElementById('nameFb').className='input-feedback feedback-err';return}
+    // if(!name){document.getElementById('nameFb').textContent='✗ Name required';document.getElementById('nameFb').className='input-feedback feedback-err';return}
+    const namePattern = /^[A-Za-z\s]+$/;
+
+if(!name){
+  document.getElementById('nameFb').textContent='✗ Name required';
+  document.getElementById('nameFb').className='input-feedback feedback-err';
+  return;
+}
+
+if(!namePattern.test(name)){
+  document.getElementById('nameFb').textContent='✗ Only alphabets allowed';
+  document.getElementById('nameFb').className='input-feedback feedback-err';
+  return;
+}
     if(!email||!email.includes('@')){document.getElementById('emailFb').textContent='✗ Valid email required';document.getElementById('emailFb').className='input-feedback feedback-err';return}
     if(pw.length<6){alert('Password must be at least 6 characters.');return}
     if(pw!==cpw){alert('Passwords do not match.');return}
@@ -432,9 +476,7 @@ function createAccount(){
 }
 
 function goToDashboard(){
-  const role=localStorage.getItem('userRole')||'player'
-  const map={player:'player-dashboard.html',streamer:'streamer-dashboard.html',admin:'admin-dashboard.html',organizer:'organizer-dashboard.html'}
-  window.location.href=map[role]
+  window.location.href='login.html'
 }
 </script>
 </body>

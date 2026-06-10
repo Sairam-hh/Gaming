@@ -278,7 +278,14 @@ if(!emailRegex.test(email)){
   errEl.textContent='Please enter a valid email address.';
   errEl.classList.add('show');
   return;
-}  errEl.classList.remove('show')
+}  
+
+if(pw.length < 6){
+  errEl.textContent='Password must be at least 6 characters.';
+  errEl.classList.add('show');
+  return;
+}
+errEl.classList.remove('show')
   // Show spinner
   document.getElementById('loginBtnText').textContent='LOGGING IN...'
   document.getElementById('loginSpinner').style.display='block'
